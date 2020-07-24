@@ -2,6 +2,7 @@ const width = 28
 const grid = document.querySelector('.grid')
 const scoreDisplay = document.getElementById('score')
 let squares = []
+let scores = 0
 
 // 0 - pacdots
 // 1 - wall
@@ -73,32 +74,51 @@ function control(e){
 		case 40:
 			console.log("pressed down")
 			if(pacmanCurrentIndex+width<width*width
-					&& !squares[pacmanCurrentIndex+width].classList.contains('wall'))
+					&& !squares[pacmanCurrentIndex+width].classList.contains('wall')
+					&& !squares[pacmanCurrentIndex + width].classList.contains('ghost-lair'))
 				pacmanCurrentIndex+=width
 			break;			
 		case 38:
 			console.log("pressed up")
 			if(pacmanCurrentIndex-width>=0 
-					&& !squares[pacmanCurrentIndex-width].classList.contains('wall'))
+					&& !squares[pacmanCurrentIndex-width].classList.contains('wall')
+					&& !squares[pacmanCurrentIndex - width].classList.contains('ghost-lair'))
 				pacmanCurrentIndex-=width
 			
 			break;
 		case 37:
 			console.log("pressed left")
 			if(pacmanCurrentIndex%width!==0
-					&& !squares[pacmanCurrentIndex-1].classList.contains('wall'))
+					&& !squares[pacmanCurrentIndex-1].classList.contains('wall')
+					&& !squares[pacmanCurrentIndex - 1].classList.contains('ghost-lair'))
 				pacmanCurrentIndex-=1
+				if(pacmanCurrentIndex===364){
+					pacmanCurrentIndex = 391;
+				}
 			break;
 		case 39:
 			console.log("pressed right")
 			if(pacmanCurrentIndex%width<width-1
-					&& !squares[pacmanCurrentIndex+1].classList.contains('wall'))
+					&& !squares[pacmanCurrentIndex+1].classList.contains('wall')
+					&& !squares[pacmanCurrentIndex+1].classList.contains('ghost-lair'))
 				pacmanCurrentIndex+=1
+				if(pacmanCurrentIndex === 391){
+					pacmanCurrentIndex = 364
+				}
 			break;
 	
 	}
 	
 	squares[pacmanCurrentIndex].classList.add('pacman')
+	pacDotEaten()
 }
 	
 document.addEventListener('keyup',control)
+
+function pacDotEaten(){
+	if(squares[pacmanCurrentIndex].classList.contains('pac-dot')){
+		scores++
+		scoreDisplay.innerHTML = scores
+		squares[pacmanCurrentIndex].classList.remove('pac-dot')
+	}
+}
